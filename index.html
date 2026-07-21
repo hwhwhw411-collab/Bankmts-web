@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MAI BANK</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="app-container" id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">💰 MAI BANK</div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="tab-create">📝 Tạo</button>
+                <button class="tab-btn" data-tab="tab-profile">👤 Hồ Sơ</button>
+                <button class="tab-btn" data-tab="tab-withdraw">💳 Rút</button>
+            </div>
+
+            <!-- Tab: Tạo -->
+            <div class="tab-content active" id="tab-create">
+                <div class="stats-card">
+                    <div class="stat-item">
+                        <span class="stat-label">💰 TIỀN THU 24H</span>
+                        <span class="stat-value" id="revenue-24h">0đ</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">💸 TỔNG ĐÃ RÚT</span>
+                        <span class="stat-value" id="total-withdrawn">0đ</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">💵 SỐ DƯ CÒN LẠI</span>
+                        <span class="stat-value" id="balance">0đ</span>
+                    </div>
+                </div>
+
+                <div class="section-title">Tạo Tài Khoản</div>
+                
+                <div class="form-group">
+                    <label>Nhập tên khách hàng</label>
+                    <input type="text" id="customer-name" placeholder="VD: NGUYEN VAN A" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label>Ngân hàng</label>
+                    <select id="bank-select" class="form-input">
+                        <option value="BIDV">BIDV</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Phí giao dịch (Fee)</label>
+                    <div class="fee-display">10%</div>
+                    <input type="range" id="fee-slider" min="0" max="20" value="10" class="fee-slider">
+                    <div class="fee-labels">
+                        <span>0%</span>
+                        <span>20%</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="btn-create">🔄 TẠO MÃ ĐƠN HÀNG</button>
+
+                <div id="order-result" class="order-result hidden">
+                    <div class="order-card">
+                        <div class="order-title">✅ Tạo thành công!</div>
+                        <div class="order-detail">
+                            <span class="order-label">Mã đơn hàng</span>
+                            <span class="order-value" id="order-code">---</span>
+                        </div>
+                        <div class="order-detail">
+                            <span class="order-label">Tên khách hàng</span>
+                            <span class="order-value" id="order-customer">---</span>
+                        </div>
+                        <div class="order-detail">
+                            <span class="order-label">STK</span>
+                            <span class="order-value" id="order-stk">---</span>
+                        </div>
+                        <div class="order-detail">
+                            <span class="order-label">Ngân hàng</span>
+                            <span class="order-value" id="order-bank">BIDV</span>
+                        </div>
+                        <div class="order-detail">
+                            <span class="order-label">Chiết khấu (Fee)</span>
+                            <span class="order-value" id="order-fee">10%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">Lịch sử gần đây</div>
+                <div id="history-list" class="history-list"></div>
+            </div>
+
+            <!-- Tab: Hồ Sơ -->
+            <div class="tab-content" id="tab-profile">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">👤</div>
+                        <div class="profile-name" id="profile-name">---</div>
+                    </div>
+
+                    <div class="profile-info">
+                        <div class="info-row">
+                            <span class="info-label">🆔 Telegram ID</span>
+                            <span class="info-value" id="profile-id">---</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🏦 Ngân hàng</span>
+                            <span class="info-value" id="profile-bank">---</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">💳 STK</span>
+                            <span class="info-value" id="profile-stk">---</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">👤 Chủ TK</span>
+                            <span class="info-value" id="profile-owner">---</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">Thêm Tài Khoản Nhận Tiền</div>
+                
+                <div class="form-group">
+                    <label>Tên chủ tài khoản</label>
+                    <input type="text" id="edit-owner" placeholder="VD: NGUYEN VAN A" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label>Ngân hàng</label>
+                    <input type="text" id="edit-bank" placeholder="VD: Vietcombank, BIDV, MB..." class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label>Số tài khoản (STK)</label>
+                    <input type="text" id="edit-stk" placeholder="Nhập số tài khoản" class="form-input">
+                </div>
+
+                <button class="btn-primary" id="btn-save-profile">💾 LƯU TÀI KHOẢN</button>
+            </div>
+
+            <!-- Tab: Rút -->
+            <div class="tab-content" id="tab-withdraw">
+                <div class="section-title">💰 Rút Tiền</div>
+                
+                <div class="form-group">
+                    <label>Số tiền cần rút</label>
+                    <input type="number" id="withdraw-amount" placeholder="Nhập số tiền" class="form-input" min="50000">
+                </div>
+
+                <div class="fee-calc">
+                    <div class="fee-row">
+                        <span>Số tiền rút:</span>
+                        <span id="wd-amount">0đ</span>
+                    </div>
+                    <div class="fee-row">
+                        <span>Phí (10% + 3k):</span>
+                        <span id="wd-fee">0đ</span>
+                    </div>
+                    <div class="fee-row highlight">
+                        <span>💵 Số tiền nhận:</span>
+                        <span id="wd-total">0đ</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="btn-withdraw">💳 GỬI YÊU CẦU RÚT</button>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <footer class="bottom-nav">
+            <button class="nav-btn active" data-tab="tab-create">📝</button>
+            <button class="nav-btn" data-tab="tab-profile">👤</button>
+            <button class="nav-btn" data-tab="tab-withdraw">💳</button>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
